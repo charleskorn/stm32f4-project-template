@@ -1,1 +1,3 @@
 v1.6.1
+
+Note that stm32f4xx_fmc.c and stm32f4xx_fmc.h have been removed as they are not relevant for the STM32F407.
