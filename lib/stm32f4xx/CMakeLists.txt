@@ -13,7 +13,7 @@ target_include_directories(stm32f4xx PUBLIC inc/drivers)
 target_compile_definitions(stm32f4xx PUBLIC USE_STDPERIPH_DRIVER)
 target_compile_definitions(stm32f4xx PUBLIC ${DEVICE_FAMILY})
 
-set(shared_options -mlittle-endian -mthumb -mcpu=cortex-m4 -mthumb-interwork -mfloat-abi=hard -ffreestanding -nostdlib -flto -Wall -Wextra)
+set(shared_options -mlittle-endian -mthumb -mcpu=cortex-m4 -mthumb-interwork -mfloat-abi=hard -ffreestanding -nostdlib -flto -Wall -Wextra -Os)
 
 target_compile_options(stm32f4xx PUBLIC ${shared_options})
 target_compile_options(stm32f4xx PUBLIC -ffunction-sections)
