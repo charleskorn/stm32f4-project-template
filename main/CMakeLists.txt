@@ -12,6 +12,8 @@ target_link_libraries(${elf_file} PUBLIC stm32f4xx)
 target_compile_options(${elf_file} PUBLIC -fno-exceptions)
 target_compile_options(${elf_file} PUBLIC -fno-rtti)
 target_compile_options(${elf_file} PUBLIC -std=c++11)
+target_compile_options(${elf_file} PUBLIC -flto)
+target_link_libraries(${elf_file} PUBLIC -flto)
 
 add_custom_command(OUTPUT ${hex_file} DEPENDS ${elf_file} COMMAND ${CMAKE_OBJCOPY} -Oihex ${elf_file} ${hex_file})
 add_custom_command(OUTPUT ${bin_file} DEPENDS ${elf_file} COMMAND ${CMAKE_OBJCOPY} -Obinary ${elf_file} ${bin_file})
