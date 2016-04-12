@@ -46,7 +46,7 @@ void enableGPIOD() {
 }
 
 void enableOutputPin(GPIO_TypeDef* gpio, uint16_t pin) {
-	gpio->MODER |= 0b01 << (pin * 2);
+	gpio->MODER |= GPIO_Mode_OUT << (pin * 2);
 }
 
 void enableTIM2() {
