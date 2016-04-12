@@ -2,7 +2,6 @@
 
 void enableGPIOD();
 void enableOutputPin(GPIO_TypeDef* gpio, uint16_t pin);
-void setPin(GPIO_TypeDef* gpio, uint16_t pin, bool value);
 void enableTIM2();
 void enableTimerUpdateInterrupt(TIM_TypeDef* tim);
 void setPrescaler(TIM_TypeDef* tim, uint16_t prescaler);
@@ -48,14 +47,6 @@ void enableGPIOD() {
 
 void enableOutputPin(GPIO_TypeDef* gpio, uint16_t pin) {
 	gpio->MODER |= 0b01 << (pin * 2);
-}
-
-void setPin(GPIO_TypeDef* gpio, uint16_t pin, bool value) {
-	if (value) {
-		gpio->BSRRL = 1 << pin;
-	} else {
-		gpio->BSRRH = 1 << pin;
-	}
 }
 
 void enableTIM2() {
@@ -104,7 +95,9 @@ void onTIM2Tick() {
 	lastPinOn = (lastPinOn + 1) % pinCount;
 
 	for (auto i = 0; i < pinCount; i++) {
-		setPin(GPIOD, pins[i], i == lastPinOn);
+		BitAction value = (i == lastPinOn ? Bit_SET : Bit_RESET);
+
+		GPIO_WriteBit(GPIOD, 1 << pins[i], value);
 	}
 }
 
