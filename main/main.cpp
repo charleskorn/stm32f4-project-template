@@ -20,7 +20,7 @@ void resetTimer(TIM_TypeDef* tim);
 void enableIRQ(IRQn_Type irq);
 void resetTimerInterrupt(TIM_TypeDef* tim);
 
-int main() {
+void main() {
 	SystemInit();
 
 	enableGPIOD();
