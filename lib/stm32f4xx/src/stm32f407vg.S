@@ -179,54 +179,54 @@ _start:
 copy_data:  ldr   r1, DATA_BEG
     ldr     r2, TEXT_END
     ldr     r3, DATA_END
-    subs    r3, r3, r1    // Length of initialized data
-    beq   zero_bss    // Skip if none
+    subs    r3, r3, r1                  // Length of initialized data
+    beq     zero_bss                    // Skip if none
 
 copy_data_loop: ldrb    r4, [r2], #1    // Read byte from flash
-    strb    r4, [r1], #1      // Store byte to RAM
-    subs    r3, r3, #1      // Decrement counter
-    bgt     copy_data_loop    // Repeat until done
+    strb    r4, [r1], #1                // Store byte to RAM
+    subs    r3, r3, #1                  // Decrement counter
+    bgt     copy_data_loop              // Repeat until done
 
 // Zero uninitialized data (bss)
 
 zero_bss:   ldr     r1, BSS_BEG
     ldr     r3, BSS_END
-    subs    r3, r3, r1    // Length of uninitialized data
-    beq   call_ctors    // Skip if none
+    subs    r3, r3, r1                  // Length of uninitialized data
+    beq     call_ctors                  // Skip if none
 
     mov     r2, #0
 
 zero_bss_loop:  strb    r2, [r1], #1    // Store zero
-    subs    r3, r3, #1    // Decrement counter
-    bgt   zero_bss_loop   // Repeat until done
+    subs    r3, r3, #1                  // Decrement counter
+    bgt     zero_bss_loop               // Repeat until done
 
 // Call C++ constructors.  The compiler and linker together populate the .ctors
 // code section with the addresses of the constructor functions.
 
 call_ctors: ldr   r0, CTORS_BEG
-    ldr   r1, CTORS_END
-    subs    r1, r1, r0    // Length of ctors section
-    beq   run   // Skip if no constructors
+    ldr     r1, CTORS_END
+    subs    r1, r1, r0                  // Length of ctors section
+    beq     run                         // Skip if no constructors
 
-ctors_loop: ldr   r2, [r0], #4    // Load next constructor address
-    push    {r0,r1}     // Save registers
-    blx   r2      // Call constructor
-    pop   {r0,r1}     // Restore registers
-    subs    r1, r1, #4    // Decrement counter
-    bgt   ctors_loop    // Repeat until done
+ctors_loop: ldr   r2, [r0], #4          // Load next constructor address
+    push    {r0,r1}                     // Save registers
+    blx     r2                          // Call constructor
+    pop     {r0,r1}                     // Restore registers
+    subs    r1, r1, #4                  // Decrement counter
+    bgt     ctors_loop                  // Repeat until done
 
 run:
     // Call SystemInit()
-    bl    SystemInit
+    bl     SystemInit
 
     // Call main()
-    mov   r0, #0      // argc=0
-    mov   r1, #0      // argv=NULL
-    bl    main      // Call C main()
+    mov    r0, #0                       // argc=0
+    mov    r1, #0                       // argv=NULL
+    bl     main                         // Call C main()
     // Fallthrough
 
 loop_if_end_reached:
-    b loop_if_end_reached // Loop forever
+    b      loop_if_end_reached          // Loop forever
 
 //=============================================================================
 
