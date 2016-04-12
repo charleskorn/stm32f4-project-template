@@ -1,171 +1,92 @@
-/*
-*****************************************************************************
-**
-**  File        : stm32f4xx_flash_offset.ld
-**
-**  Abstract    : Linker script for STM32F407VG Device with
-**                1024KByte FLASH, 192KByte RAM
-**
-**                Set heap size, stack size and stack location according
-**                to application requirements.
-**
-**                Set memory bank area and size if external memory is used.
-**
-**  Target      : STMicroelectronics STM32
-**
-**  Environment : Atollic TrueSTUDIO(R)
-**
-**  Distribution: The file is distributed “as is,” without any warranty
-**                of any kind.
-**
-**  (c)Copyright Atollic AB.
-**  You may use this file as-is or modify it according to the needs of your
-**  project. Distribution of this file (unmodified or modified) is not
-**  permitted. Atollic AB permit registered Atollic TrueSTUDIO(R) users the
-**  rights to distribute the assembled, compiled & linked contents of this
-**  file as part of an application binary file, provided that it is built
-**  using the Atollic TrueSTUDIO(R) toolchain.
-**
-*****************************************************************************
-*/
+/* Linker script for STM32F407VG Cortex-M4 ARM MCU */
+/* From http://tech.munts.com/MCU/Frameworks/ARM/stm32f4/stm32f407vg.ld */
 
-/* Entry Point */
-ENTRY(Reset_Handler)
+/* Copyright (C)2013-2016, Philip Munts, President, Munts AM Corp.		*/
+/*										*/
+/* Redistribution and use in source and binary forms, with or without		*/
+/* modification, are permitted provided that the following conditions are met:	*/
+/*										*/
+/* * Redistributions of source code must retain the above copyright notice,	*/
+/*   this list of conditions and the following disclaimer.			*/
+/*										*/
+/* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"	*/
+/* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE	*/
+/* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE	*/
+/* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE	*/
+/* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR		*/
+/* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF		*/
+/* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS	*/
+/* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN	*/
+/* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)	*/
+/* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE	*/
+/* POSSIBILITY OF SUCH DAMAGE.							*/
 
-/* Highest address of the user mode stack */
-_estack = 0x20020000;    /* end of 128K RAM on AHB bus*/
-
-/* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0;      /* required amount of heap  */
-_Min_Stack_Size = 0x400; /* required amount of stack */
-
-/* Specify the memory areas */
 MEMORY
 {
-  FLASH (rx)      : ORIGIN = 0x08004000, LENGTH = 1024K - 0x4000
-  RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 128K
-  CCMRAM (xrw)    : ORIGIN = 0x10000000, LENGTH = 64K  
-  MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
+  flash (rx)  : ORIGIN = 0x00000000, LENGTH = 1024K
+  ram (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
+  ccm (rwx) : ORIGIN = 0x10000000, LENGTH = 64K
 }
 
-/* Define output sections */
+__rom_start__	= ORIGIN(flash);
+__rom_size__	= LENGTH(flash);
+__ram_start__	= ORIGIN(ram);
+__ram_size__	= LENGTH(ram);
+__ram_end__	= __ram_start__ + __ram_size__;
+__stack_end__	= __ram_end__;		/* Top of RAM */
+__stack_size__	= 16K;
+__stack_start__	= __stack_end__ - __stack_size__;
+__heap_start__	= __bss_end__;		/* Between bss and stack */
+__heap_end__	= __stack_start__;
+__ccm_start__	= ORIGIN(ccm);
+__ccm_size__	= LENGTH(ccm);
+
 SECTIONS
 {
-  /* The startup code goes first into FLASH */
-  .isr_vector :
-  {
-    . = ALIGN(4);
-    KEEP(*(.isr_vector)) /* Startup code */
-    . = ALIGN(4);
-  } >FLASH
+  . = 0;
 
-  /* The program code and other data goes into FLASH */
-  .text :
-  {
-    . = ALIGN(4);
-    *(.text)           /* .text sections (code) */
-    *(.text*)          /* .text* sections (code) */
-    *(.rodata)         /* .rodata sections (constants, strings, etc.) */
-    *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
-    *(.glue_7)         /* glue arm to thumb code */
-    *(.glue_7t)        /* glue thumb to arm code */
-
-    KEEP (*(.init))
-    KEEP (*(.fini))
-
-    . = ALIGN(4);
-    _etext = .;        /* define a global symbols at end of code */
-  } >FLASH
-
-
-   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
-    .ARM : {
-    __exidx_start = .;
-      *(.ARM.exidx*)
-      __exidx_end = .;
-    } >FLASH
-
-  .preinit_array     :
-  {
-    PROVIDE_HIDDEN (__preinit_array_start = .);
-    KEEP (*(.preinit_array*))
-    PROVIDE_HIDDEN (__preinit_array_end = .);
-  } >FLASH
-  .init_array :
-  {
-    PROVIDE_HIDDEN (__init_array_start = .);
-    KEEP (*(SORT(.init_array.*)))
-    KEEP (*(.init_array*))
-    PROVIDE_HIDDEN (__init_array_end = .);
-  } >FLASH
-  .fini_array :
-  {
-    PROVIDE_HIDDEN (__fini_array_start = .);
-    KEEP (*(.fini_array*))
-    KEEP (*(SORT(.fini_array.*)))
-    PROVIDE_HIDDEN (__fini_array_end = .);
-  } >FLASH
-
-  /* used by the startup to initialize data */
-  _sidata = .;
-
-  /* Initialized data sections goes into RAM, load LMA copy after code */
-  .data : AT ( _sidata )
-  {
-    . = ALIGN(4);
-    _sdata = .;        /* create a global symbol at data start */
-    *(.data)           /* .data sections */
-    *(.data*)          /* .data* sections */
-
-    . = ALIGN(4);
-    _edata = .;        /* define a global symbol at data end */
-  } >RAM
-
-  /* Uninitialized data section */
+  .text : {
+  KEEP(*(.startup))			/* Startup code */
+  *(.text*)				/* Program code */
+  KEEP(*(.rodata*))			/* Read only data */
+  *(.glue_7)
+  *(.glue_7t)
+  *(.eh_frame)
   . = ALIGN(4);
-  .bss :
-  {
-    /* This is used by the startup in order to initialize the .bss secion */
-    _sbss = .;         /* define a global symbol at bss start */
-    __bss_start__ = _sbss;
-    *(.bss)
-    *(.bss*)
-    *(COMMON)
+  __ctors_start__ = .;
+  KEEP(*(.init_array))			/* C++ constructors */
+  KEEP(*(.ctors))			/* C++ constructors */
+  __ctors_end__ = .;
+  . = ALIGN(16);
+  __text_end__ = .;
+  } >flash
 
-    . = ALIGN(4);
-    _ebss = .;         /* define a global symbol at bss end */
-    __bss_end__ = _ebss;
-  } >RAM
+  .data : ALIGN(16) {
+  __data_beg__ = .;			/* Used in crt0.S */
+  *(.data*)				/* Initialized data */
+  __data_end__ = .;			/* Used in crt0.S */
+  } >ram AT > flash
 
-  PROVIDE ( end = _ebss );
-  PROVIDE ( _end = _ebss );
+  .bss (NOLOAD) : ALIGN(16) {
+  __bss_beg__ = .;			/* Used in crt0.S */
+  *(.bss*)				/* Uninitialized data */
+  *(COMMON)				/* Common data */
+  __bss_end__ = .;			/* Used in crt0.S */
+  } >ram
 
-  /* User_heap_stack section, used to check that there is enough RAM left */
-  ._user_heap_stack :
-  {
-    . = ALIGN(4);
-    . = . + _Min_Heap_Size;
-    . = . + _Min_Stack_Size;
-    . = ALIGN(4);
-  } >RAM
+/* C++ exception unwinding stuff--needed by some toolchains */
 
-  /* MEMORY_bank1 section, code must be located here explicitly            */
-  /* Example: extern int foo(void) __attribute__ ((section (".mb1text"))); */
-  .memory_b1_text :
-  {
-    *(.mb1text)        /* .mb1text sections (code) */
-    *(.mb1text*)       /* .mb1text* sections (code)  */
-    *(.mb1rodata)      /* read-only data (constants) */
-    *(.mb1rodata*)
-  } >MEMORY_B1
+  .ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
 
-  /* Remove information from the standard libraries */
-  /DISCARD/ :
-  {
-    libc.a ( * )
-    libm.a ( * )
-    libgcc.a ( * )
-  }
-  
-  .ARM.attributes 0 : { *(.ARM.attributes) }
+  __exidx_start = .;
+  .ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
+  __exidx_end = .;
 }
+
+/* Firmware entry point */
+
+ENTRY(_vectors)
+
+/*  Libraries to link against. */
+
+/* INPUT( -lstm32f407vg ) */
