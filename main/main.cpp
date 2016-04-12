@@ -39,8 +39,6 @@ int main() {
 	enableAutoReload(TIM2);
 	enableCounter(TIM2);
 	resetTimer(TIM2);
-
-	while (1);
 }
 
 void enableGPIOD() {

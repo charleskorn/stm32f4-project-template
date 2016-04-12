@@ -86,7 +86,3 @@ SECTIONS
 /* Firmware entry point */
 
 ENTRY(_vectors)
-
-/*  Libraries to link against. */
-
-/* INPUT( -lstm32f407vg ) */

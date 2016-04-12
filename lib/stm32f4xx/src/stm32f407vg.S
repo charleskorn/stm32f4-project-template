@@ -41,7 +41,6 @@
     .extern   __ctors_start__
     .extern   __ctors_end__
     .extern   main
-    .extern   _exit
 
 //=============================================================================
 
@@ -221,7 +220,10 @@ call_main:  mov   r0, #0      // argc=0
     mov   r1, #0      // argv=NULL
 
     bl    main      // Call C main()
-    bl    _exit     // Call _exit() if main() returns
+    // Fallthrough
+
+loop_if_end_reached:
+    b loop_if_end_reached // Loop forever
 
 //=============================================================================
 
