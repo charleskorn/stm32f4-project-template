@@ -1,11 +1,5 @@
 #include "stm32f4xx.h"
 
-// All of these belong to port D.
-const uint16_t orangeLedPin = 13;
-const uint16_t greenLedPin = 12;
-const uint16_t redLedPin = 14;
-const uint16_t blueLedPin = 15;
-
 void enableGPIOD();
 void enableOutputPin(GPIO_TypeDef* gpio, uint16_t pin);
 void setPin(GPIO_TypeDef* gpio, uint16_t pin, bool value);
@@ -19,21 +13,30 @@ void enableCounter(TIM_TypeDef* tim);
 void resetTimer(TIM_TypeDef* tim);
 void enableIRQ(IRQn_Type irq);
 void resetTimerInterrupt(TIM_TypeDef* tim);
+void onTIM2Tick();
+
+// All of these belong to port D.
+const uint16_t greenLedPin = 12;
+const uint16_t orangeLedPin = 13;
+const uint16_t redLedPin = 14;
+const uint16_t blueLedPin = 15;
+const uint16_t pinCount = 4;
+const uint16_t pins[pinCount] = {greenLedPin, orangeLedPin, redLedPin, blueLedPin};
+
+uint16_t lastPinOn = 0;
 
 void main() {
 	enableGPIOD();
 
-	enableOutputPin(GPIOD, orangeLedPin);
-	enableOutputPin(GPIOD, greenLedPin);
-	enableOutputPin(GPIOD, redLedPin);
-	enableOutputPin(GPIOD, blueLedPin);
-	setPin(GPIOD, blueLedPin, true);
+	for (auto i = 0; i < pinCount; i++) {
+		enableOutputPin(GPIOD, pins[i]);
+	}
 
 	enableTIM2();
 	enableIRQ(TIM2_IRQn);
 	enableTimerUpdateInterrupt(TIM2);
 	setPrescaler(TIM2, 16 - 1); // Set scale to microseconds, based on a 16 MHz clock
-	setPeriod(TIM2, millisecondsToMicroseconds(1000) - 1);
+	setPeriod(TIM2, millisecondsToMicroseconds(300) - 1);
 	enableAutoReload(TIM2);
 	enableCounter(TIM2);
 	resetTimer(TIM2);
@@ -97,10 +100,18 @@ void resetTimerInterrupt(TIM_TypeDef* tim) {
 	tim->SR = 0;
 }
 
+void onTIM2Tick() {
+	lastPinOn = (lastPinOn + 1) % pinCount;
+
+	for (auto i = 0; i < pinCount; i++) {
+		setPin(GPIOD, pins[i], i == lastPinOn);
+	}
+}
+
 extern "C" {
 	void TIM2_IRQHandler() {
 		if (TIM2->SR & TIM_SR_UIF) {
-			GPIOD->ODR ^= 1 << orangeLedPin;
+			onTIM2Tick();
 		}
 
 		resetTimerInterrupt(TIM2);
