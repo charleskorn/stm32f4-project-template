@@ -11,23 +11,42 @@ Should also be able to be adapted for use with any STM32F4 series MCU.
 
 ## Setup
 
-	mkdir build
-	cd build
-	cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm-none-eabi.cmake ..
+    mkdir build
+    cd build
+    cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm-none-eabi.cmake ..
 
 ## Building
 
-	# In the build/ directory created in 'Setup' above
-	make
+    # In the build/ directory created in 'Setup' above
+    make
 
 ## Flashing firmware
 
-	# In the build/ directory created in 'Setup' above
-	make flash_firmware
+    # In the build/ directory created in 'Setup' above
+    make flash_firmware
+
+## Tips / gotchas
+
+### IRQ handler isn't being executed
+
+* Make sure your handler matches the name given in `stm32f407vg.S`.
+
+* If your handler is in a C++ file, make sure it is compiled with C linkage (see [this Wikipedia page](https://en.wikipedia.org/wiki/Compatibility_of_C_and_C%2B%2B#Linking_C_and_C.2B.2B_code) for an explanation of why this is necessary).
+
+  This means you should wrap your IRQ handler in `extern "C"`, like this:
+
+  ```cpp
+  extern "C" {
+    void MyReallyCool_IRQHandler() {
+
+    }
+  }
+  ```
 
 ## Acknowledgements and references
 
 * [ST's STM32F4 DSP and standard peripherals library](http://www2.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-libraries/stsw-stm32065.html)
+
   Note that the files relating to the FMC have been removed as they are not relevant to the STM32F407.
 
 * [ST's clock configuration tool](http://www2.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-configurators-and-code-generators/stsw-stm32091.html)
