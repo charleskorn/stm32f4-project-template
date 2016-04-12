@@ -21,8 +21,6 @@ void enableIRQ(IRQn_Type irq);
 void resetTimerInterrupt(TIM_TypeDef* tim);
 
 void main() {
-	SystemInit();
-
 	enableGPIOD();
 
 	enableOutputPin(GPIOD, orangeLedPin);

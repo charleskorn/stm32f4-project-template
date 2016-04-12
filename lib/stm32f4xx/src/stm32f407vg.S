@@ -41,6 +41,7 @@
     .extern   __ctors_start__
     .extern   __ctors_end__
     .extern   main
+    .extern   SystemInit
 
 //=============================================================================
 
@@ -205,7 +206,7 @@ zero_bss_loop:  strb    r2, [r1], #1    // Store zero
 call_ctors: ldr   r0, CTORS_BEG
     ldr   r1, CTORS_END
     subs    r1, r1, r0    // Length of ctors section
-    beq   call_main   // Skip if no constructors
+    beq   run   // Skip if no constructors
 
 ctors_loop: ldr   r2, [r0], #4    // Load next constructor address
     push    {r0,r1}     // Save registers
@@ -214,11 +215,13 @@ ctors_loop: ldr   r2, [r0], #4    // Load next constructor address
     subs    r1, r1, #4    // Decrement counter
     bgt   ctors_loop    // Repeat until done
 
-// Call main()
+run:
+    // Call SystemInit()
+    bl    SystemInit
 
-call_main:  mov   r0, #0      // argc=0
+    // Call main()
+    mov   r0, #0      // argc=0
     mov   r1, #0      // argv=NULL
-
     bl    main      // Call C main()
     // Fallthrough
 
