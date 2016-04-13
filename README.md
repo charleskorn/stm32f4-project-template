@@ -22,13 +22,16 @@ It contains:
 
   ![Flashing LEDs](doc/flashing-leds.gif)
 
-This is a work in progress -- please feel free to submit ideas, suggestions, issue reports and, of course, pull requests.
+This is a work in progress - please feel free to submit ideas, suggestions, issue reports and, of course, pull requests.
 
 ## Requirements
 
-* [stlink](https://github.com/texane/stlink) -- `brew install stlink` on OS X
-* [CMake](http://cmake.org) -- `brew install cmake` on OS X
-* [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) -- `brew install gcc-arm-none-eabi-49` on OS X
+* [stlink](https://github.com/texane/stlink) - `brew install stlink` on OS X
+* [CMake](http://cmake.org) - `brew install cmake` on OS X
+* [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) - `brew install gcc-arm-none-eabi-49` on OS X
+
+I haven't tested this on anything other than OS X. There's no reason I know of that would prevent it from working on Linux.
+Windows might be a bit more challenging though :)
 
 ## Setup
 
