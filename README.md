@@ -36,14 +36,18 @@ Windows might be a bit more challenging though :)
 ## Setup
 You should only need to run this once to set up the makefile:
 
-    stm32f4-project-template $ mkdir build
-    stm32f4-project-template $ cd build
-    stm32f4-project-template/build $ cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm-none-eabi.cmake ..
+  ```bash
+  stm32f4-project-template $ mkdir build
+  stm32f4-project-template $ cd build
+  stm32f4-project-template/build $ cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm-none-eabi.cmake ..
+  ```
 
 ## Building
 
-    # In the build/ directory created in 'Setup' above
-    stm32f4-project-template/build $ make
+  ```bash
+  # In the build/ directory created in 'Setup' above
+  stm32f4-project-template/build $ make
+  ```
 
 Note that if you add or remove any source code files, you'll need to run `cmake ..` again to get it to regenerate the makefile.
 (This is because I'm using globbing and CMake [doesn't support detecting changes when using globbing](https://cmake.org/cmake/help/v3.3/command/file.html?highlight=We+do+not+recommend+using+GLOB).
@@ -53,8 +57,10 @@ If this annoys you, the alternative is to specify each file individually in the 
 Connect the board to your computer with a USB-to-mini-USB cable (use the port at the top of the board, away from the buttons and audio jack -
 the micro USB port at the front of the board is not for programming), then run:
 
-    # In the build/ directory created in 'Setup' above
-    stm32f4-project-template/build $ make flash_firmware
+  ```bash
+  # In the build/ directory created in 'Setup' above
+  stm32f4-project-template/build $ make flash_firmware
+  ```
 
 ## Tips / gotchas
 
@@ -90,6 +96,8 @@ the micro USB port at the front of the board is not for programming), then run:
 * [http://stackoverflow.com/a/20805828/1668119](http://stackoverflow.com/a/20805828/1668119) for compiler flags
 
 * [http://simplemachines.it/doc/arm_inst.pdf](http://simplemachines.it/doc/arm_inst.pdf) for ARM instruction set (useful when tweaking startup assembly)
+
+* [http://jeremyherbert.net/get/stm32f4_getting_started](http://jeremyherbert.net/get/stm32f4_getting_started) for pointers to some useful documentation and examples of how to use the GPIOs and timers
 
 ## Contributing
 
