@@ -1,13 +1,34 @@
-# STM32F4 Discovery board toolchain
-A project template for the [STM32F4 Discovery board](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF252419).
+# STM32F4 Discovery board project template
 
-Should also be able to be adapted for use with any STM32F4 series MCU.
+This is a project template for the [STM32F4 Discovery board](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF252419),
+a development and evaluation board for a popular ARM microcontroller.
+
+It should also be able to be adapted for use with any microcontroller from the STM32F4 series.
+
+It contains:
+
+* a working toolchain for building and flashing software
+
+* in `libs`, the [STM32F4 DSP and standard peripherals library](http://www2.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-libraries/stsw-stm32065.html),
+  which has two main parts:
+
+  * a set of header files with lots of useful constants (eg. registers defined by name)
+  * a set of device drivers that abstract away some of the low-level hardware details
+
+  The header files are quite useful, but I have mixed feelings about the device drivers. They do have some useful constants, and anything you don't use will be
+  optimised out out of the final flash image.
+
+* in `main`, a sample application that will flash the LEDs in a pattern to demonstrate everything is working OK:
+
+  ![Flashing LEDs](doc/flashing-leds.gif)
+
+This is a work in progress -- please feel free to submit ideas, suggestions, issue reports and, of course, pull requests.
 
 ## Requirements
 
-* [stlink](https://github.com/texane/stlink) - `brew install stlink`
-* [CMake](http://cmake.org) - `brew install cmake`
-* [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) - `brew install gcc-arm-none-eabi-49`
+* [stlink](https://github.com/texane/stlink) -- `brew install stlink` on OS X
+* [CMake](http://cmake.org) -- `brew install cmake` on OS X
+* [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) -- `brew install gcc-arm-none-eabi-49` on OS X
 
 ## Setup
 
@@ -19,6 +40,10 @@ Should also be able to be adapted for use with any STM32F4 series MCU.
 
     # In the build/ directory created in 'Setup' above
     make
+
+Note that if you add or remove any source code files, you'll need to run `cmake ..` again to get it to regenerate the makefile.
+(This is because I'm using globbing and CMake [doesn't support detecting changes when using globbing](https://cmake.org/cmake/help/v3.3/command/file.html?highlight=We+do+not+recommend+using+GLOB).
+If this annoys you, the alternative is to specify each file individually in the appropriate `CMakeLists.txt` file... I find globbing the lesser of two evils.)
 
 ## Flashing firmware
 
