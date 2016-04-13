@@ -22,7 +22,7 @@ It contains:
 
   ![Flashing LEDs](doc/flashing-leds.gif)
 
-This is a work in progress, but it should be ready for use - please feel free to submit ideas, suggestions, issue reports and, of course, pull requests.
+This is a work in progress, but it should be ready for use. Please feel free to submit ideas, suggestions, issue reports and pull requests.
 
 ## Requirements
 
