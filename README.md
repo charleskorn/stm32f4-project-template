@@ -3,7 +3,7 @@
 This is a project template for the [STM32F4 Discovery board](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF252419),
 a development and evaluation board for a popular ARM microcontroller.
 
-It should also be able to be adapted for use with any microcontroller from the STM32F4 series.
+It should also be able to be adapted for use with any microcontroller from the STM32F4 series, although you may need to alter some configuration options.
 
 It contains:
 
@@ -83,8 +83,6 @@ the micro USB port at the front of the board is not for programming), then run:
 ## Acknowledgements and references
 
 * [ST's STM32F4 DSP and standard peripherals library](http://www2.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-libraries/stsw-stm32065.html)
-
-  Note that the files relating to the FMC have been removed as they are not relevant to the STM32F407 used on the Discovery board.
 
 * [ST's clock configuration tool](http://www2.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-configurators-and-code-generators/stsw-stm32091.html)
   for generating `system_stm32f4xx.c`
