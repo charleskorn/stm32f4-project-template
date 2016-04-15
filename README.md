@@ -1,5 +1,7 @@
 # STM32F4 Discovery board project template
 
+[![Build Status](https://travis-ci.org/charleskorn/stm32f4-project-template.svg?branch=master)](https://travis-ci.org/charleskorn/stm32f4-project-template)
+
 This is a project template for the [STM32F4 Discovery board](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF252419),
 a development and evaluation board for a popular ARM microcontroller.
 
@@ -8,6 +10,8 @@ It should also be able to be adapted for use with any microcontroller from the S
 It contains:
 
 * a working toolchain for building and flashing software
+
+* a working [Travis CI build](https://travis-ci.org/charleskorn/stm32f4-project-template)
 
 * in `libs`, the [STM32F4 DSP and standard peripherals library](http://www2.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-libraries/stsw-stm32065.html),
   which has two main parts:
