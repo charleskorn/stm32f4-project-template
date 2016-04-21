@@ -60,12 +60,9 @@ target_compile_definitions(stm32f4xx PUBLIC USE_STDPERIPH_DRIVER)
 target_compile_definitions(stm32f4xx PUBLIC ${DEVICE_FAMILY})
 target_compile_definitions(stm32f4xx PUBLIC HSE_VALUE=8000000)
 
-set(shared_options -mlittle-endian -mthumb -mcpu=cortex-m4 -mthumb-interwork -mfloat-abi=hard -ffreestanding -nostdlib -Wall -Wextra -Os)
+set(shared_options -Wall -Wextra -Os)
 
 target_compile_options(stm32f4xx PUBLIC ${shared_options})
-target_compile_options(stm32f4xx PUBLIC -ffunction-sections)
-target_compile_options(stm32f4xx PUBLIC -fdata-sections)
 
 target_link_libraries(stm32f4xx PUBLIC ${shared_options})
-target_link_libraries(stm32f4xx PUBLIC -Wl,--gc-sections)
 target_link_libraries(stm32f4xx PUBLIC -T${LINKER_SCRIPT})
