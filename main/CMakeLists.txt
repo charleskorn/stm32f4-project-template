@@ -9,6 +9,10 @@ file(GLOB sources *.cpp)
 add_executable(${elf_file} ${sources})
 target_link_libraries(${elf_file} PUBLIC stm32f4xx)
 
+set(shared_options -Wall -Wextra -Os -nostdlib)
+target_compile_options(${elf_file} PRIVATE ${shared_options})
+target_link_libraries(${elf_file} PRIVATE ${shared_options})
+
 target_compile_options(${elf_file} PUBLIC -fno-exceptions)
 target_compile_options(${elf_file} PUBLIC -fno-rtti)
 target_compile_options(${elf_file} PUBLIC -std=c++11)

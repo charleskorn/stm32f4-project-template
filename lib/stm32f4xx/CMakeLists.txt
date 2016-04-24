@@ -60,9 +60,8 @@ target_compile_definitions(stm32f4xx PUBLIC USE_STDPERIPH_DRIVER)
 target_compile_definitions(stm32f4xx PUBLIC ${DEVICE_FAMILY})
 target_compile_definitions(stm32f4xx PUBLIC HSE_VALUE=8000000)
 
-set(shared_options -Wall -Wextra -Os)
+set(shared_options -Wall -Wextra -Os -nostartfiles)
+target_compile_options(stm32f4xx PRIVATE ${shared_options})
+target_link_libraries(stm32f4xx PRIVATE ${shared_options})
 
-target_compile_options(stm32f4xx PUBLIC ${shared_options})
-
-target_link_libraries(stm32f4xx PUBLIC ${shared_options})
 target_link_libraries(stm32f4xx PUBLIC -T${LINKER_SCRIPT})
