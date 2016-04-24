@@ -84,6 +84,21 @@ stm32f4-project-template/build $ make flash_firmware
   }
   ```
 
+### Using with CLion
+
+Some tweaking is required to get [CLion](jetbrains.com/clion) up and running initially:
+
+1. Open the project in CLion
+2. In Preferences (OS X) / Settings (everything else), go to 'Build, Execution, Deployment', then 'CMake', and add the following
+  to 'CMake Options' under 'Generation': `-DCMAKE_TOOLCHAIN_FILE=toolchain-arm-none-eabi.cmake`
+
+Note that on-device debugging is not supported in CLion (see issue [CPP-744](https://youtrack.jetbrains.com/issue/CPP-744)).
+
+Flashing from CLion is possible (run the `flash_firmware` task), but it will ask you for an executable to run.
+You can either leave this blank, which will cause CLion to ask you for an executable the next time you attermpt to run
+the task, or specify one of the executables produced (eg. `stm32f4test_firmware.elf`), although CLion will then try and
+fail to run this executable on your development computer after flashing the firmware onto the board.
+
 ## Acknowledgements and references
 
 * [ST's STM32F4 DSP and standard peripherals library](http://www2.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-libraries/stsw-stm32065.html)
