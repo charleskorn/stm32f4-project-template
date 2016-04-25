@@ -40,7 +40,8 @@ This is a work in progress, but it should be ready for use. Please feel free to 
 * [OpenOCD](http://openocd.org/) - `brew install openocd` on OS X
 
 I haven't tested this on anything other than OS X. There's no reason I know of that would prevent it from working on Linux.
-Windows might be a bit more challenging though :)
+In theory, it should work on Windows as well, but we make use of Bash scripts in places, so you would either need to install
+Bash (through [MinGW](http://www.mingw.org/), for example) or rework those parts to not use Bash scripts.
 
 ## Setup
 You should only need to run this once to set up the makefile:
