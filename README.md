@@ -44,19 +44,16 @@ In theory, it should work on Windows as well, but we make use of Bash scripts in
 Bash (through [MinGW](http://www.mingw.org/), for example) or rework those parts to not use Bash scripts.
 
 ## Setup
-You should only need to run this once to set up the makefile:
+You should only need to run this once to set up the build system:
 
 ```bash
-stm32f4-project-template $ mkdir build
-stm32f4-project-template $ cd build
-stm32f4-project-template/build $ cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm-none-eabi.cmake ..
+stm32f4-project-template $ ./go.sh setup
 ```
 
 ## Building
 
 ```bash
-# In the build/ directory created in 'Setup' above
-stm32f4-project-template/build $ make
+stm32f4-project-template $ ./go.sh build
 ```
 
 Note that if you add or remove any source code files, you'll need to run `cmake ..` again to get it to regenerate the makefile.
@@ -68,16 +65,14 @@ Connect the board to your computer with a USB-to-mini-USB cable (use the port at
 the micro USB port at the front of the board is not for programming), then run:
 
 ```bash
-# In the build/ directory created in 'Setup' above
-stm32f4-project-template/build $ make flash_firmware
+stm32f4-project-template $ ./go.sh flash
 ```
 
 ## Testing
 Connect the board to your computer just like you would for flashing firmware (see above), then run:
 
 ```bash
-# In the build/ directory created in 'Setup' above
-stm32f4-project-template/build $ make run_tests
+stm32f4-project-template $ ./go.sh test
 ```
 
 Note that running the test firmware without a debugger that has semihosting support attached will cause the test
@@ -124,7 +119,7 @@ Some tweaking is required to get [CLion](jetbrains.com/clion) up and running ini
 
 1. Open the project in CLion
 2. In Preferences (OS X) / Settings (everything else), go to 'Build, Execution, Deployment', then 'CMake', and add the following
-  to 'CMake Options' under 'Generation': `-DCMAKE_TOOLCHAIN_FILE=toolchain-arm-none-eabi.cmake`
+  to 'CMake Options' under 'Generation': `-DCMAKE_TOOLCHAIN_FILE=tools/toolchain-arm-none-eabi.cmake`
 
 #### Debugging
 
