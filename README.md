@@ -26,6 +26,10 @@ It contains:
 
   ![Flashing LEDs](doc/flashing-leds.gif)
 
+* in `test`, a test runner with some dummy tests. This uses [Bandit](http://banditcpp.org/) as the test framework.
+  It includes support for running the tests on-device using [semihosting](http://www.wolinlabs.com/blog/stm32f4.semihosting.html).
+  (See below for some important notes about this.)
+
 This is a work in progress, but it should be ready for use. Please feel free to submit ideas, suggestions, issue reports and pull requests.
 
 ## Requirements
@@ -66,6 +70,31 @@ the micro USB port at the front of the board is not for programming), then run:
 # In the build/ directory created in 'Setup' above
 stm32f4-project-template/build $ make flash_firmware
 ```
+
+## Testing
+Connect the board to your computer just like you would for flashing firmware (see above), then run:
+
+```bash
+# In the build/ directory created in 'Setup' above
+stm32f4-project-template/build $ make run_tests
+```
+
+Note that running the test firmware without a debugger that has semihosting support attached will cause the test
+runner to hang. This scenario can be identified by the orange LED remaining on. The `run_tests` target should take
+care of setting this up for you.
+
+[Bandit](http://banditcpp.org/) is quite large (takes around 190K of flash once all dependencies are included),
+so you may want to consider switching to a smaller framework if this is an issue for your application.
+
+In addition to printing information on the host computer, the test runner uses the LEDs to indicate the status of the
+test run:
+
+| LED    | Status |
+| ------ | ------ |
+| Orange | Enabling semihosting. Should only be on for a second or two at the beginning of the test run. If this LED remains on indefinitely, ensure that a debugger is connected to your device and semihosting has been enabled. |
+| Blue   | Tests running. |
+| Green  | Test run completed and all tests passed. |
+| Red    | Test run completed but one or more tests failed, or no tests were found. |
 
 ## Tips / gotchas
 
