@@ -85,7 +85,8 @@ runner to hang. This scenario can be identified by the orange LED remaining on. 
 care of setting this up for you.
 
 [Bandit](http://banditcpp.org/) is quite large (takes around 190K of flash once all dependencies are included),
-so you may want to consider switching to a smaller framework if this is an issue for your application.
+so you may want to consider switching to a more lightweight framework if this is an issue for your application.
+It may also be possible to slim down Bandit by removing unused features.
 
 In addition to printing information on the host computer, the test runner uses the LEDs to indicate the status of the
 test run:

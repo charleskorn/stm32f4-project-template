@@ -1,4 +1,4 @@
-set(target_base_name stm32f4test_firmware)
+set(target_base_name ${application_name}_firmware)
 project(${target_base_name} CXX)
 
 set(elf_file ${target_base_name}.elf)

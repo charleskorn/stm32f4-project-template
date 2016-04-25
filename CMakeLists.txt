@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
+set(application_name stm32f4test)
 add_subdirectory(lib)
 add_subdirectory(main)
 add_subdirectory(test)
