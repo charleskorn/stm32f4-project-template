@@ -33,6 +33,7 @@ This is a work in progress, but it should be ready for use. Please feel free to 
 * [stlink](https://github.com/texane/stlink) - `brew install stlink` on OS X
 * [CMake](http://cmake.org) - `brew install cmake` on OS X
 * [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) - `brew install gcc-arm-none-eabi-49` on OS X
+* [OpenOCD](http://openocd.org/) - `brew install openocd` on OS X
 
 I haven't tested this on anything other than OS X. There's no reason I know of that would prevent it from working on Linux.
 Windows might be a bit more challenging though :)
@@ -86,18 +87,31 @@ stm32f4-project-template/build $ make flash_firmware
 
 ### Using with CLion
 
+#### Initial setup
+
 Some tweaking is required to get [CLion](jetbrains.com/clion) up and running initially:
 
 1. Open the project in CLion
 2. In Preferences (OS X) / Settings (everything else), go to 'Build, Execution, Deployment', then 'CMake', and add the following
   to 'CMake Options' under 'Generation': `-DCMAKE_TOOLCHAIN_FILE=toolchain-arm-none-eabi.cmake`
 
-Note that on-device debugging is not supported in CLion (see issue [CPP-744](https://youtrack.jetbrains.com/issue/CPP-744)).
+#### Debugging
+
+On-device debugging is not supported in CLion (see issue [CPP-744](https://youtrack.jetbrains.com/issue/CPP-744)).
+
+#### Flashing
 
 Flashing from CLion is possible (run the `flash_firmware` task), but it will ask you for an executable to run.
 You can either leave this blank, which will cause CLion to ask you for an executable the next time you attermpt to run
 the task, or specify one of the executables produced (eg. `stm32f4test_firmware.elf`), although CLion will then try and
 fail to run this executable on your development computer after flashing the firmware onto the board.
+
+#### Issues with missing dependencies
+
+CLion creates the build tree in its own private directory and will not pull down dependencies specified with CMake's
+`ExternalProject` unless you explicitly tell it to. This means that code completion will not work for libraries set up
+using `ExternalProject` until you run a target that downloads that dependency - either the `<library>_sources` task,
+or any target that depends on the library.
 
 ## Acknowledgements and references
 
@@ -115,6 +129,8 @@ fail to run this executable on your development computer after flashing the firm
 * [http://simplemachines.it/doc/arm_inst.pdf](http://simplemachines.it/doc/arm_inst.pdf) for ARM instruction set (useful when tweaking startup assembly)
 
 * [http://jeremyherbert.net/get/stm32f4_getting_started](http://jeremyherbert.net/get/stm32f4_getting_started) for pointers to some useful documentation and examples of how to use the GPIOs and timers
+
+* [OpenOCD](http://openocd.org/) for original `stm32f4discovery.cfg` OpenOCD configuration file.
 
 ## Contributing
 

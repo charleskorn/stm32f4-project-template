@@ -40,6 +40,7 @@ __heap_start__	= __bss_end__;		/* Between bss and stack */
 __heap_end__	= __stack_start__;
 __ccm_start__	= ORIGIN(ccm);
 __ccm_size__	= LENGTH(ccm);
+end             = __heap_start__;
 
 SECTIONS
 {
