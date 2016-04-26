@@ -27,7 +27,7 @@ It contains:
   ![Flashing LEDs](doc/flashing-leds.gif)
 
 * in `test`, a test runner with some dummy tests. This uses [Bandit](http://banditcpp.org/) as the test framework.
-  It includes support for running the tests on-device using [semihosting](http://www.wolinlabs.com/blog/stm32f4.semihosting.html).
+  It includes support for running the tests both on the host computer and on-device using [semihosting](http://www.wolinlabs.com/blog/stm32f4.semihosting.html).
   (See below for some important notes about this.)
 
 This is a work in progress, but it should be ready for use. Please feel free to submit ideas, suggestions, issue reports and pull requests.
@@ -47,37 +47,41 @@ Bash (through [MinGW](http://www.mingw.org/), for example) or rework those parts
 You should only need to run this once to set up the build system:
 
 ```bash
-stm32f4-project-template $ ./go.sh setup
+./go.sh setup
 ```
 
-## Building
+## Building firmware
+Run this command:
 
 ```bash
-stm32f4-project-template $ ./go.sh build
+./go.sh build-target
 ```
-
-Note that if you add or remove any source code files, you'll need to run `cmake ..` again to get it to regenerate the makefile.
-(This is because I'm using globbing and CMake [doesn't support detecting changes when using globbing](https://cmake.org/cmake/help/v3.3/command/file.html?highlight=We+do+not+recommend+using+GLOB).
-If this annoys you, the alternative is to specify each file individually in the appropriate `CMakeLists.txt` file. I find globbing the lesser of two evils.)
 
 ## Flashing firmware
 Connect the board to your computer with a USB-to-mini-USB cable (use the port at the top of the board, away from the buttons and audio jack -
 the micro USB port at the front of the board is not for programming), then run:
 
 ```bash
-stm32f4-project-template $ ./go.sh flash
+./go.sh flash
 ```
 
-## Testing
+## Testing on your computer (the 'host')
+Run this command:
+
+```bash
+./go.sh test-host
+```
+
+## Testing on device (the 'target')
 Connect the board to your computer just like you would for flashing firmware (see above), then run:
 
 ```bash
-stm32f4-project-template $ ./go.sh test
+./go.sh test-target
 ```
 
 Note that running the test firmware without a debugger that has semihosting support attached will cause the test
-runner to hang. This scenario can be identified by the orange LED remaining on. The `run_tests` target should take
-care of setting this up for you.
+runner to hang. This scenario can be identified by the orange LED remaining on. Using `./go.sh test-target` should
+take care of this for you.
 
 [Bandit](http://banditcpp.org/) is quite large (takes around 190K of flash once all dependencies are included),
 so you may want to consider switching to a more lightweight framework if this is an issue for your application.
@@ -112,8 +116,27 @@ test run:
   ```
 
 ### Using with CLion
+CLion uses CMake internally, and CMake's support for targeting multiple toolchains (eg. your computer and your target device) is
+non-existent. Hence CLion doesn't support multiple toolchains either. (The `go.sh` script hides this detail from you, making
+sure to always use a build tree appropriate for the task.)
 
-#### Initial setup
+You can choose to have CLion target either your local computer, or the target device.
+I recommend targeting your local toolchain (especially if you're practicing TDD), but either is possible:
+
+#### Using CLion with a local ('host') toolchain
+
+No configuration is required to have CLion use your host toolchain - this is the default.
+
+You'll be able to run and debug the tests using CLion's built-in tools. (Note that the tests won't appear in the 'Tests' tool
+as that only supports Google Test.)
+
+Until the fix in [CPP-2471](https://youtrack.jetbrains.com/issue/CPP-2471) is released, the test process output may appear
+garbled, as CLion doesn't support the ANSI colour code escape sequences. If this annoys you, add `--no-color` to the list of arguments
+in the run configuration of the test runner.
+
+#### Using CLion with a device ('target') toolchain
+
+##### Initial setup
 
 Some tweaking is required to get [CLion](jetbrains.com/clion) up and running initially:
 
@@ -121,22 +144,22 @@ Some tweaking is required to get [CLion](jetbrains.com/clion) up and running ini
 2. In Preferences (OS X) / Settings (everything else), go to 'Build, Execution, Deployment', then 'CMake', and add the following
   to 'CMake Options' under 'Generation': `-DCMAKE_TOOLCHAIN_FILE=tools/toolchain-arm-none-eabi.cmake`
 
-#### Debugging
+##### Debugging
 
 On-device debugging is not supported in CLion (see issue [CPP-744](https://youtrack.jetbrains.com/issue/CPP-744)).
 
-#### Flashing
+##### Flashing
 
 Flashing from CLion is possible (run the `flash_firmware` task), but it will ask you for an executable to run.
 You can either leave this blank, which will cause CLion to ask you for an executable the next time you attermpt to run
 the task, or specify one of the executables produced (eg. `stm32f4test_firmware.elf`), although CLion will then try and
 fail to run this executable on your development computer after flashing the firmware onto the board.
 
-#### Issues with missing dependencies
+#### Issues with missing dependencies in CLion (applies to both host and target toolchains)
 
 CLion creates the build tree in its own private directory and will not pull down dependencies specified with CMake's
 `ExternalProject` unless you explicitly tell it to. This means that code completion will not work for libraries set up
-using `ExternalProject` until you run a target that downloads that dependency - either the `<library>_sources` task,
+using `ExternalProject` (such as Bandit) until you run a target that downloads that dependency - either the `<library>_sources` task,
 or any target that depends on the library.
 
 ## Acknowledgements and references
