@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "bandit/bandit.h"
 #include "stm32f4xx.h"
 

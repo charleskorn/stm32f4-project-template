@@ -6,4 +6,4 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y gcc-arm-none-eabi
 
-script: ./go.sh build
+script: ./go.sh setup && ./go.sh build-host && ./go.sh test-host && ./go.sh build-target
