@@ -37,15 +37,13 @@ if(${building_for_target})
 
     add_custom_target(${target_base_name} ALL DEPENDS ${hex_file} ${bin_file} ${bin_file}-size)
 
-    get_filename_component(openocd_config ../tools/stm32f4discovery-stlink-v2-1.cfg ABSOLUTE)
     get_filename_component(run_on_target_script ../tools/run-on-target.sh ABSOLUTE)
-    find_program(OPENOCD_EXECUTABLE openocd)
     add_custom_target(run_tests DEPENDS ${executable_file} COMMAND
             ${run_on_target_script}
             ${executable_file}
             ${ARM_GDB_EXECUTABLE}
             ${OPENOCD_EXECUTABLE}
-            ${openocd_config})
+            ${OPENOCD_CONFIG})
 endif()
 
 if(${building_for_host})

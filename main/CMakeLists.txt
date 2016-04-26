@@ -24,6 +24,7 @@ if(${building_for_target})
 
     add_custom_target(${target_base_name} ALL DEPENDS ${hex_file} ${bin_file} ${bin_file}-size)
 
-    find_program(ST_FLASH_EXECUTABLE st-flash)
-    add_custom_target(flash_firmware DEPENDS ${bin_file}-size COMMAND ${ST_FLASH_EXECUTABLE} --reset write ${bin_file} 0x8000000)
+    add_custom_target(flash_firmware DEPENDS ${bin_file}-size COMMAND ${OPENOCD_EXECUTABLE}
+            -f ${OPENOCD_CONFIG}
+            --command "program ${elf_file} verify reset exit")
 endif()

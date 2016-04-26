@@ -34,7 +34,6 @@ This is a work in progress, but it should be ready for use. Please feel free to 
 
 ## Requirements
 
-* [stlink](https://github.com/texane/stlink) - `brew install stlink` on OS X
 * [CMake](http://cmake.org) - `brew install cmake` on OS X
 * [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) - `brew install gcc-arm-none-eabi-49` on OS X
 * [OpenOCD](http://openocd.org/) - `brew install openocd` on OS X
