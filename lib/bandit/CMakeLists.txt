@@ -5,6 +5,7 @@ ExternalProject_Add(
         bandit_sources
         PREFIX ${CMAKE_BINARY_DIR}/lib/bandit
         GIT_REPOSITORY https://github.com/joakimkarlsson/bandit.git
+        GIT_TAG 7b282209fb1cd9bfa36472feee453b35454e57c0
         TIMEOUT 10
         UPDATE_COMMAND ${GIT_EXECUTABLE} pull
         CONFIGURE_COMMAND ""
