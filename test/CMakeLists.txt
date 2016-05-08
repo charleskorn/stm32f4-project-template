@@ -31,9 +31,9 @@ if(${building_for_target})
     add_custom_target(${executable_file}-size DEPENDS ${executable_file} COMMAND ${ARM_SIZE_EXECUTABLE} -B -d --target=elf32-littlearm ${executable_file})
     add_custom_target(${target_base_name} ALL DEPENDS ${executable_file}-size)
 
-    get_filename_component(run_on_target_script ../tools/run-on-target.sh ABSOLUTE)
+    get_filename_component(run_tests_on_target_script ../tools/run-tests-on-target.sh ABSOLUTE)
     add_custom_target(run_tests DEPENDS ${executable_file} ${executable_file}-size COMMAND
-            ${run_on_target_script}
+            ${run_tests_on_target_script}
             ${executable_file}
             ${ARM_GDB_EXECUTABLE}
             ${OPENOCD_EXECUTABLE}
