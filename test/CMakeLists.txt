@@ -25,7 +25,6 @@ target_link_libraries(${executable_file} PUBLIC bandit)
 
 if(${building_for_target})
     target_link_libraries(${executable_file} PUBLIC stm32f4xx)
-    target_link_libraries(${executable_file} PUBLIC -specs=nano.specs)
     target_link_libraries(${executable_file} PUBLIC -specs=rdimon.specs)
     target_link_libraries(${executable_file} PUBLIC rdimon)
 
