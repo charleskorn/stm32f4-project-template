@@ -16,7 +16,7 @@ if(${building_for_target})
     target_compile_options(${elf_file} PUBLIC -fno-rtti)
     target_compile_options(${elf_file} PUBLIC -std=c++11)
 
-    add_custom_target(${elf_file}-size DEPENDS ${bin_file} COMMAND ${ARM_SIZE_EXECUTABLE} -B -d --target=binary ${bin_file})
+    add_custom_target(${elf_file}-size DEPENDS ${elf_file} COMMAND ${ARM_SIZE_EXECUTABLE} -B -d --target=binary ${elf_file})
 
     add_custom_target(${target_base_name} ALL DEPENDS ${elf_file}-size)
 
