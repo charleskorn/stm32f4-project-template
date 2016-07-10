@@ -2,9 +2,9 @@ language: cpp
 dist: trusty
 
 before_install:
-  - sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded -y
+  - sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa -y
   - sudo apt-get update -qq
-  - sudo apt-get install -y gcc-arm-none-eabi
+  - sudo apt-get install -y gcc-arm-embedded
 
 install:
 # From https://github.com/boostorg/hana/blob/master/.travis.yml
