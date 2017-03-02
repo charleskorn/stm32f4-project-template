@@ -35,7 +35,7 @@ This is a work in progress, but it should be ready for use. Please feel free to 
 ## Requirements
 
 * [CMake 3.6 or later](http://cmake.org) - `brew install cmake` on OS X
-* [GCC ARM toolchain](https://launchpad.net/gcc-arm-embdded) - `brew install gcc-arm-none-eabi-49` on OS X
+* [GCC ARM toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm) - `brew cask install gcc-arm-embedded` on OS X
 * [OpenOCD](http://openocd.org/) - `brew install openocd` on OS X
 
 I haven't tested this on anything other than OS X. There's no reason I know of that would prevent it from working on Linux.
